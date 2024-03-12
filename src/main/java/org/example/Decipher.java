@@ -1,13 +1,15 @@
 package org.example;
 
+import java.security.Key;
+
 public class Decipher {
 
     private Integer[] permutation;
     private var sBox;
     private var sInv;
-    private keyManagement key;
+    private KeyMgmt key;
 
-    public Decipher(Integer[] permutation, var sBox, keyManagement key) {
+    public Decipher(Integer[] permutation, var sBox, KeyMgmt key) {
         this.permutation = permutation;
         this.sBox = sBox;
         this.key=key;
@@ -19,7 +21,11 @@ public class Decipher {
         return null;
     }
 
+    public int doDecipher(int text){
 
+        //TODO: decipher
+        return 0;
+    }
 
 
 }
