@@ -5,10 +5,10 @@ import java.util.Map;
 
 public class Decipher {
 
-    private Integer[] permutation;
-    private Map sBox;
-    private Map sInv;
-    private KeyMgmt key;
+    private final Integer[] permutation;
+    private final Map<Integer,Integer> sBox;
+    private final Map<Integer,Integer> sInv;
+    private final KeyMgmt key;
 
     public Decipher(Integer[] permutation, Map<Integer,Integer> sBox, KeyMgmt key) {
         this.permutation = permutation;
@@ -17,19 +17,23 @@ public class Decipher {
         this.sInv=inverse(sBox);
     }
 
-    private Map inverse(Map sBox) {
+    private Map<Integer,Integer> inverse(Map<Integer,Integer> sBox) {
         Map<Integer,Integer> map = new HashMap<>();
-        for (Object o : sBox.keySet()) {
-            Integer key = (Integer) o;
-            Integer value = (Integer) sBox.get(key);
-            map.put(value,key);
+        for (Integer o : sBox.keySet()) {
+            Integer value = sBox.get(o);
+            map.put(value, o);
         }
         return map;
     }
 
     public int doDecipher(int text){
 
-        //TODO: decipher
+        //TODO: do decipher rounds 0 to r-1
+
+
+
+
+        //TODO: do last round r
         return 0;
     }
 
