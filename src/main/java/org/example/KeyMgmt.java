@@ -4,16 +4,16 @@ import java.util.Arrays;
 
 public class KeyMgmt {
 
-    int r,s,n,m;
-    int[] key;
-    int[] beta;
+    private int r,s,n,m;
+    private int[] key;
+    private int[] beta;
 
     /**
      * r: How many rounds for encryption & decryption
      * s: Length of key
-     * n: Length one box of s-box
      * n * m: Length of roundkey i
      * k: The full key who will get split into roundkeys
+     * beta: Bit at index i has the index beta[i] after the permutation
      * */
     public KeyMgmt(int r, int s, int n, int m, String k, int[] beta) {
         this.r = r;
@@ -24,6 +24,7 @@ public class KeyMgmt {
         keyIntoArray(k);
     }
 
+    //TODO Delete this main function befor submitting the code to vogt
     public static void main(String[] args){
         int[] b = {4,5,8,9,0,1,10,11,2,3,6,7};
         KeyMgmt mgmt = new KeyMgmt(3,24,4,3,"000110101111110000000111",b);
