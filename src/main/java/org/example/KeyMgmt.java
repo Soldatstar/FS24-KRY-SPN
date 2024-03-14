@@ -25,15 +25,22 @@ public class KeyMgmt {
     }
 
     public static void main(String[] args){
-        KeyMgmt mgmt = new KeyMgmt(3,24,4,3,"000110101111110000000111",null);
+        int[] b = {4,5,8,9,0,1,10,11,2,3,6,7};
+        KeyMgmt mgmt = new KeyMgmt(3,24,4,3,"000110101111110000000111",b);
+
+        System.out.println("--- Encription roundkeys---");
         for(int i = 0; i < 3+1; i++){
-            System.out.println(Arrays.toString(mgmt.getKeyForEncription(i)));
+            System.out.println("roundkey encription " + i + " :" + Arrays.toString(mgmt.getKeyForEncription(i)));
+        }
+        System.out.println("--- Decription roundkeys---");
+        for(int i = 0; i < 3+1; i++){
+            System.out.println("roundkey decription " + i + " :" + Arrays.toString(mgmt.getKeyForDecription(i)));
         }
     }
 
     private void keyIntoArray(String k) throws IllegalArgumentException {
         if(s != k.length()){
-            throw new IllegalArgumentException("keylenght is not s");
+            throw new IllegalArgumentException("Keylenght is not s");
         }
         else {
             key = new int[s];
@@ -45,7 +52,7 @@ public class KeyMgmt {
                     key[i] = 0;
                 }
                 else{
-                    throw new IllegalArgumentException("chars other than 0 or 1 in key");
+                    throw new IllegalArgumentException("Chars other than 0 or 1 in key");
                 }
             }
         }
@@ -75,10 +82,28 @@ public class KeyMgmt {
     }
 
     /**
-     * i = 0 or i = r then k(i,r-i)
-     * else k(i,r-i) with beta permutated
+     * i = 0 or i = r then return roundkey r-i
+     * else return roundkey r-i with beta permutated
      * */
-    public int[] getKeyForDecription(int i, int k){
-        return null;
+    public int[] getKeyForDecription(int i) throws IllegalArgumentException{
+        int[] tmpRoundkey = getKeyForEncription(r-i);
+        if(i == 0 || i == r){
+            return tmpRoundkey;
+        }
+        else{
+            if(beta.length != n*m){
+                throw new IllegalArgumentException("Beta has not the right length");
+            }
+            else{
+                int[] roundkey = new int[n*m];
+                for(int j = 0; j < n*m; j++){
+                    if (beta[j] > n*m-1) {
+                        throw new IllegalArgumentException("Beta has illegal values");
+                    }
+                    roundkey[j] = tmpRoundkey[beta[j]];
+                }
+                return roundkey;
+            }
+        }
     }
 }
