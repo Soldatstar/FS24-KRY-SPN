@@ -5,6 +5,8 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args){
+
+        //demonstration of the cipher with the given example from the task
         int r = 4;
         int s = 32;
         int n = 4;
@@ -31,10 +33,11 @@ public class Main {
         sBox.put("1110","0000");//14 0
         sBox.put("1111","0111");
 
-        cipher encipher = new cipher(r,n,m,beta,sBox,keys,klartext);
-        String chiffretext = encipher.chiffretext();
-        System.out.println("klartext: " + klartext);
+        cipher encipher = new cipher(r,n,m,beta,sBox,keys);
+        String chiffretext = encipher.chiffreText(klartext);
+        System.out.println("klartext davor: " + klartext);
         System.out.println("Chiffretext: " + chiffretext);
-        System.out.println("Klartext: " + encipher.dechiffretext(chiffretext));
+        System.out.println("Klartext danach: " + encipher.dechiffreText(chiffretext));
+
     }
 }
