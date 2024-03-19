@@ -3,7 +3,7 @@ package org.example;
 import java.util.HashMap;
 import java.util.Map;
 
-public class cipher {
+public class Cipher {
 
     private final int r;
     private final int n;
@@ -22,7 +22,7 @@ public class cipher {
      * sbox: Has n*n many mappings from bitstring with lenght n to another bitstring lenght n
      * keys: Generates the roundkeys
      */
-    public cipher(int r, int n, int m, int[] beta, Map<String, String> sBox, KeyMgmt keys) {
+    public Cipher(int r, int n, int m, int[] beta, Map<String, String> sBox, KeyMgmt keys) {
         this.r = r;
         this.n = n;
         this.m = m;
@@ -212,4 +212,61 @@ public class cipher {
         return plainText;
     }
 
+    //CTR MODE STUFF AFTER THIS LINE
+
+    public String dechiffreTextCTR(String chiffreText) {
+        StringBuilder plainText = new StringBuilder();
+
+        String block0 = chiffreText.substring(0, 16); // Erster Block (Zähler) extrahieren
+
+        chiffreText = chiffreText.substring(16); // entfernt den Zähler aus dem Chiffretext
+
+        for (int i = 0; i < chiffreText.length(); i += 16) {
+            String block = chiffreText.substring(i, i + 16);
+            String counter = String.format("%16s", Integer.toBinaryString(Integer.parseInt(block0, 2) + i / 16))
+                .replaceAll(" ", "0"); //erhöht den Zähler um 1 und konvertiert ihn in einen 16-Bit-String
+
+            String encryptedCounter = chiffreText(counter); // verschlüsselt den Zähler
+
+            // führt ein XOR zwischen dem verschlüsselten Zähler und dem Chiffretext-Block durch
+            int[] xorResult = xor(convertStringToIntArray(block), convertStringToIntArray(encryptedCounter));
+
+            for (int bit : xorResult) {
+                plainText.append(bit);
+            }
+        }
+
+        // Remove padding
+        int lastOneIndex = plainText.lastIndexOf("1");
+        if (lastOneIndex != -1) {
+            plainText.delete(lastOneIndex, plainText.length());
+        }
+
+        return convertToASCII(plainText.toString());
+    }
+
+
+    // Hilfsmethode zum Konvertieren eines Bitstrings in ein int-Array
+    private int[] convertStringToIntArray(String s) {
+        int[] result = new int[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            result[i] = Character.getNumericValue(s.charAt(i));
+        }
+        return result;
+    }
+
+    public String convertToASCII(String binary) {
+        StringBuilder ascii = new StringBuilder();
+
+        for (int i = 0; i < binary.length(); i += 8) {
+
+            int endIndex = Math.min(i + 8, binary.length());
+            String block = binary.substring(i, endIndex);
+            int asciiValue = Integer.parseInt(block, 2);
+            ascii.append((char) asciiValue);
+        }
+
+        return ascii.toString();
+    }
 }
+

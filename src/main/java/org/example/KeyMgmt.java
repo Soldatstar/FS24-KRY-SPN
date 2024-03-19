@@ -8,8 +8,8 @@ public class KeyMgmt {
     private final int s;
     private final int n;
     private final int m;
-    private int[] key;
     private final int[] beta;
+    private int[] key;
 
     /**
      * r: How many rounds for encryption & decryption
@@ -73,8 +73,9 @@ public class KeyMgmt {
         } else if (4 * i + n * m > s) {
             throw new IllegalArgumentException("Roundkey i out of bounds");
         } else {
-            if (4 * i + n * m - 4 * i >= 0)
-                System.arraycopy(key, 4 * i, roundkey, 4 * i - 4 * i, 4 * i + n * m - 4 * i);
+            if (4 * i + n * m - 4 * i >= 0) {
+                System.arraycopy(key, 4 * i, roundkey, 0, 4 * i + n * m - 4 * i);
+            }
         }
         return roundkey;
     }

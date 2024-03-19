@@ -12,9 +12,12 @@ public class Main {
         int s = 32;
         int n = 4;
         int m = 4;
-        String key = "00010001001010001000110000000000";
+        String demoKey = "00010001001010001000110000000000";
+        String key = "00111010100101001101011000111111";
+
         int[] beta = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
         KeyMgmt keys = new KeyMgmt(r, s, n, m, key, beta);
+        KeyMgmt demoKeys = new KeyMgmt(r, s, n, m, demoKey, beta);
         String klartext = "0001001010001111";
         Map<String, String> sBox = new HashMap<>();
         sBox.put("0000", "1110");// 0 E
@@ -34,11 +37,21 @@ public class Main {
         sBox.put("1110", "0000");//14 0
         sBox.put("1111", "0111");
 
-        cipher encipher = new cipher(r, n, m, beta, sBox, keys);
-        String chiffretext = encipher.chiffreText(klartext);
+        Cipher cipher = new Cipher(r, n, m, beta, sBox, keys);
+        Cipher demoCipher = new Cipher(r, n, m, beta, sBox, demoKeys);
+
+        String chiffretext = demoCipher.chiffreText(klartext);
         System.out.println("klartext davor: " + klartext);
         System.out.println("Chiffretext: " + chiffretext);
-        System.out.println("Klartext danach: " + encipher.dechiffreText(chiffretext));
+        System.out.println("Klartext danach: " + demoCipher.dechiffreText(chiffretext));
+        System.out.println(
+            "Klartext davor und danach sind gleich: " + klartext.equals(demoCipher.dechiffreText(chiffretext)));
+
+        String test = cipher.dechiffreTextCTR(
+            "00000100110100100000101110111000000000101000111110001110011111110110000001010001010000111010000000010011011001110010101110110000");
+
+        System.out.println(test.length());
+        System.out.printf("Test: %s\n", test);
 
     }
 }
