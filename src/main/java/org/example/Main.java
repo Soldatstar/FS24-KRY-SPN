@@ -37,11 +37,16 @@ public class Main {
         System.out.println(
             "Klartext davor und danach sind gleich: " + klartext.equals(demoCipher.dechiffreText(chiffretext)));
 
+        String bitStringAfterEncryption = cipher.chiffreTextCTR("Hello world");
+        System.out.println("Hello World as encrypted bitstring: " + bitStringAfterEncryption);
+
+        String bitStringAfterDecryption = cipher.dechiffreTextCTR(bitStringAfterEncryption);
+        System.out.println("Hello World as decrypted string: " + bitStringAfterDecryption);
+
         String solution = cipher.dechiffreTextCTR(
             "00000100110100100000101110111000000000101000111110001110011111110110000001010001010000111010000000010011011001110010101110110000");
 
         System.out.printf("Solution to given chiffretext: %s\n", solution);
-
     }
 
     private static Map<String, String> initSbox() {

@@ -27,21 +27,6 @@ public class KeyMgmt {
         keyIntoArray(k);
     }
 
-    //TODO Delete this main function befor submitting the code to vogt
-    public static void main(String[] args) {
-        int[] b = {4, 5, 8, 9, 0, 1, 10, 11, 2, 3, 6, 7};
-        KeyMgmt mgmt = new KeyMgmt(3, 24, 4, 3, "000110101111110000000111", b);
-
-        System.out.println("--- Encription roundkeys---");
-        for (int i = 0; i < 3 + 1; i++) {
-            System.out.println("roundkey encription " + i + " :" + Arrays.toString(mgmt.getKeyForEncription(i)));
-        }
-        System.out.println("--- Decription roundkeys---");
-        for (int i = 0; i < 3 + 1; i++) {
-            System.out.println("roundkey decription " + i + " :" + Arrays.toString(mgmt.getKeyForDecription(i)));
-        }
-    }
-
     private void keyIntoArray(String k) throws IllegalArgumentException {
         if (s != k.length()) {
             throw new IllegalArgumentException("Keylenght is not s");

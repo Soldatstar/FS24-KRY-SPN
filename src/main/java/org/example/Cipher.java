@@ -1,7 +1,9 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Cipher {
 
@@ -245,6 +247,50 @@ public class Cipher {
         return convertToASCII(plainText.toString());
     }
 
+    /**
+     * Die Methode chiffreTextCTR verschlüsselt einen ASCII-Text im CTR-Modus auf folgende Weise:
+     * Zunächst wird der ASCII-Text in eine binäre Zeichenfolge umgewandelt.
+     * Anschliessend wird ein Zufallswert rand generiert und die binäre Zeichenfolge so angepasst,
+     * dass sie durch 16 teilbar ist. Ein weiterer Zufallswert y wird erzeugt und die binäre Zeichenfolge in
+     * 16-Bit-Blöcke unterteilt. Für jeden Block wird ein Zählerwert n berechnet, der dann verschlüsselt wird.
+     * Schliesslich werden die verschlüsselten Blöcke zu einer Ergebniszeichenfolge kombiniert,
+     * die als verschlüsselte Zeichenfolge zurückgegeben wird.
+     * */
+    public String chiffreTextCTR(String ascitext){
+        String text = convertToBinary(ascitext);
+        StringBuilder result = new StringBuilder();
+        int rand = new Random().nextInt((int)Math.pow(2, 16));
+
+        if(text.length() % 16 != 0){
+            text += "1";
+            while(text.length() % 16 != 0){
+                text += "0";
+            }
+        }
+
+        String y = Integer.toBinaryString(rand);
+        while(y.length() < 16){
+            y = "0" + y;
+        }
+        result.append(y);
+
+        for (int i = 0; i < text.length(); i += 16) {
+            int n = (rand + (i/16)) % (int)Math.pow(2, 16);
+            y = Integer.toBinaryString(n);
+            while(y.length() < 16){
+                y = "0" + y;
+            }
+
+            String z = chiffreText(y);
+            String x = text.substring(i, i + 16);
+            int[] xorResult = xor(convertStringToIntArray(z),convertStringToIntArray(x));
+            for (int bit : xorResult) {
+                result.append(bit);
+            }
+        }
+        return result.toString();
+    }
+
 
     // Hilfsmethode zum Konvertieren eines Bitstrings in ein int-Array
     private int[] convertStringToIntArray(String s) {
@@ -267,6 +313,24 @@ public class Cipher {
         }
 
         return ascii.toString();
+    }
+
+    public String convertToBinary(String asciiText) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < asciiText.length(); i++) {
+            int asciiValue = asciiText.charAt(i);
+            String binaryString = Integer.toBinaryString(asciiValue);
+
+            // Ensure each binary representation is 8 bits long by adding leading zeros if necessary
+            while (binaryString.length() < 8) {
+                binaryString = "0" + binaryString;
+            }
+
+            result.append(binaryString);
+        }
+
+        return result.toString();
     }
 }
 
